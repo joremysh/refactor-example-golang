@@ -43,18 +43,17 @@ func Statement(invoice Invoice, plays map[string]Play) string {
 	}
 
 	for _, perf := range invoice.Performances {
-		play := playFor(perf)
-		thisAmount := amountFor(perf, play)
+		thisAmount := amountFor(perf, playFor(perf))
 
 		// add volume credit
 		volumeCredits += Max(perf.Audience-30, 0)
 
 		// every 10 comedy audiences could get extra volume credits
-		if "comedy" == play.Type {
+		if "comedy" == playFor(perf).Type {
 			volumeCredits += int(math.Floor(float64(perf.Audience / 5)))
 		}
 
-		result += fmt.Sprintf(" %s: %s (%d seats)\n", play.Name, format(thisAmount/(100)), perf.Audience)
+		result += fmt.Sprintf(" %s: %s (%d seats)\n", playFor(perf).Name, format(thisAmount/(100)), perf.Audience)
 		totalAmount += thisAmount
 	}
 	result += fmt.Sprintf("Amount owed is %s\n", format(totalAmount/100))
