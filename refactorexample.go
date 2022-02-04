@@ -16,25 +16,31 @@ func Statement(invoice Invoice, plays map[string]Play) string {
 		return ac.FormatMoneyFloat64(f)
 	}
 
-	for _, perf := range invoice.Performances {
-		play := plays[perf.PlayID]
-		thisAmount := 0.0
+	var amountFor = func(perf Performance, play Play) float64 {
+		result := 0.0
 
 		switch play.Type {
 		case "tragedy":
-			thisAmount = 40000
+			result = 40000
 			if perf.Audience > 30 {
-				thisAmount += 1000 * float64(perf.Audience-30)
+				result += 1000 * float64(perf.Audience-30)
 			}
 		case "comedy":
-			thisAmount = 30000
+			result = 30000
 			if perf.Audience > 20 {
-				thisAmount += 10000 + 500*float64(perf.Audience-20)
+				result += 10000 + 500*float64(perf.Audience-20)
 			}
-			thisAmount += 300 * float64(perf.Audience)
+			result += 300 * float64(perf.Audience)
 		default:
 			panic(fmt.Sprintf("unknown type: %s", play.Type))
 		}
+
+		return result
+	}
+
+	for _, perf := range invoice.Performances {
+		play := plays[perf.PlayID]
+		thisAmount := amountFor(perf, play)
 
 		// add volume credit
 		volumeCredits += Max(perf.Audience-30, 0)
