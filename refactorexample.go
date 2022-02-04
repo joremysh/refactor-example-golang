@@ -16,6 +16,10 @@ func Statement(invoice Invoice, plays map[string]Play) string {
 		return ac.FormatMoneyFloat64(f)
 	}
 
+	var playFor = func(performance Performance) Play {
+		return plays[performance.PlayID]
+	}
+
 	var amountFor = func(perf Performance, play Play) float64 {
 		result := 0.0
 
@@ -39,7 +43,7 @@ func Statement(invoice Invoice, plays map[string]Play) string {
 	}
 
 	for _, perf := range invoice.Performances {
-		play := plays[perf.PlayID]
+		play := playFor(perf)
 		thisAmount := amountFor(perf, play)
 
 		// add volume credit
