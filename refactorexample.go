@@ -9,7 +9,6 @@ import (
 
 func Statement(invoice Invoice, plays map[string]Play) string {
 	totalAmount := 0.0
-	volumeCredits := 0
 	result := fmt.Sprintf("Statement for %s\n", invoice.Customer)
 	usd := func(f float64) string {
 		ac := accounting.Accounting{Symbol: "$", Precision: 2}
@@ -55,6 +54,7 @@ func Statement(invoice Invoice, plays map[string]Play) string {
 		result += fmt.Sprintf(" %s: %s (%d seats)\n", playFor(perf).Name, usd(amountFor(perf)), perf.Audience)
 		totalAmount += amountFor(perf)
 	}
+	volumeCredits := 0
 	for _, perf := range invoice.Performances {
 		volumeCredits += volumeCreditsFor(perf)
 	}
