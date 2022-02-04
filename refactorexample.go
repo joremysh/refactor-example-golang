@@ -51,10 +51,12 @@ func Statement(invoice Invoice, plays map[string]Play) string {
 	}
 
 	for _, perf := range invoice.Performances {
-		volumeCredits += volumeCreditsFor(perf)
 
 		result += fmt.Sprintf(" %s: %s (%d seats)\n", playFor(perf).Name, usd(amountFor(perf)), perf.Audience)
 		totalAmount += amountFor(perf)
+	}
+	for _, perf := range invoice.Performances {
+		volumeCredits += volumeCreditsFor(perf)
 	}
 	result += fmt.Sprintf("Amount owed is %s\n", usd(totalAmount))
 	result += fmt.Sprintf("You earned %d credits\n", volumeCredits)
