@@ -20,13 +20,13 @@ func Statement(invoice Invoice, plays map[string]Play) string {
 		return plays[performance.PlayID]
 	}
 
-	var volumeCreditsFor = func(perf Performance) int {
-		volumeCredits := 0
-		volumeCredits += Max(perf.Audience-30, 0)
-		if "comedy" == playFor(perf).Type {
-			volumeCredits += int(math.Floor(float64(perf.Audience / 5)))
+	var volumeCreditsFor = func(performance Performance) int {
+		result := 0
+		result += Max(performance.Audience-30, 0)
+		if "comedy" == playFor(performance).Type {
+			result += int(math.Floor(float64(performance.Audience / 5)))
 		}
-		return volumeCredits
+		return result
 	}
 
 	var amountFor = func(perf Performance) float64 {
