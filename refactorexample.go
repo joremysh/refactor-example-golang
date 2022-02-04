@@ -42,8 +42,6 @@ func Statement(invoice Invoice, plays map[string]Play) string {
 	}
 
 	for _, perf := range invoice.Performances {
-		thisAmount := amountFor(perf)
-
 		// add volume credit
 		volumeCredits += Max(perf.Audience-30, 0)
 
@@ -52,8 +50,8 @@ func Statement(invoice Invoice, plays map[string]Play) string {
 			volumeCredits += int(math.Floor(float64(perf.Audience / 5)))
 		}
 
-		result += fmt.Sprintf(" %s: %s (%d seats)\n", playFor(perf).Name, format(thisAmount/(100)), perf.Audience)
-		totalAmount += thisAmount
+		result += fmt.Sprintf(" %s: %s (%d seats)\n", playFor(perf).Name, format(amountFor(perf)/(100)), perf.Audience)
+		totalAmount += amountFor(perf)
 	}
 	result += fmt.Sprintf("Amount owed is %s\n", format(totalAmount/100))
 	result += fmt.Sprintf("You earned %d credits\n", volumeCredits)
